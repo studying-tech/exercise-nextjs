@@ -1,0 +1,37 @@
+{
+  "name": "nextjs-product-catalog",
+  "version": "1.0.0",
+  "description": "Next.js修了課題 - SSGとISRを活用した商品カタログ",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "bunx @biomejs/biome check",
+    "lint:fix": "bunx @biomejs/biome check --write",
+    "type-check": "tsc --noEmit",
+    "test": "vitest",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@heroicons/react": "^2.0.18",
+    "date-fns": "^2.30.0",
+    "classnames": "^2.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.0",
+    "@types/react": "^18.2.25",
+    "@types/react-dom": "^18.2.11",
+    "typescript": "^5.2.2",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/jest-dom": "^6.1.4",
+    "vitest": "^0.34.6",
+    "@vitest/ui": "^0.34.6",
+    "@vitest/coverage-v8": "^0.34.6",
+    "jsdom": "^22.1.0"
+  }
+}
