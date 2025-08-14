@@ -1,37 +1,14 @@
-// 【課題42】Product インターフェースを定義してください
-// 要件:
-// - id: string
-// - name: string
-// - description: string
-// - price: number
-// - category: string
-// - images: string[]
-// - stock: number
-// - featured?: boolean
-// - discount?: number
-// - createdAt: string
-// - details?: Record<string, string>
-export interface Product {
-  /* ここに実装 */
-}
+// TODO: ブログ記事のデータ型を定義してください
+export type PostData = {}
 
-// 【課題43】Category インターフェースを定義してください
-// 要件:
-// - id: string
-// - name: string
-// - slug: string
-// - description: string
-// - image: string
-export interface Category {
-  /* ここに実装 */
-}
+// TODO: 記事のメタデータ型を定義してください（contentを除く）
+export type PostMeta = {}
 
-// 【課題44】APIレスポンスの型を定義してください
-// 要件:
-// - ジェネリクス T を使用
-// - data: T
-// - total?: number
-// - error?: string
-export interface ApiResponse<T> {
-  /* ここに実装 */
+// ページのメタデータ型（実装済み）
+export interface PageMetadata {
+  title: string
+  description: string
+  keywords?: string[]
+  ogImage?: string
+  canonicalUrl?: string
 }
