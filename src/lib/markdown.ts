@@ -7,75 +7,74 @@ import type { PostData } from '@/types'
 
 const postsDirectory = path.join(process.cwd(), 'src/content/blog')
 
+// TODO: すべての記事のスラッグを取得する関数を実装
 export function getAllPostSlugs() {
-  if (!fs.existsSync(postsDirectory)) {
-    return []
-  }
-
-  const fileNames = fs.readdirSync(postsDirectory)
-  return fileNames
-    .filter((fileName) => fileName.endsWith('.md'))
-    .map((fileName) => {
-      return {
-        slug: fileName.replace(/\.md$/, ''),
-      }
-    })
+  // ヒント:
+  // 1. postsDirectoryが存在するか確認
+  // 2. fs.readdirSyncでファイル一覧を取得
+  // 3. .mdファイルのみをフィルタリング
+  // 4. ファイル名から.mdを除去してslugとして返す
+  // 例:
+  // return [
+  //   { slug: 'getting-started-with-nextjs' },
+  //   { slug: 'typescript-best-practices' }
+  // ]
 }
 
+// TODO: スラッグから記事データを取得する関数を実装
 export async function getPostBySlug(slug: string): Promise<PostData | null> {
   try {
+    // ヒント:
+    // 1. path.joinでファイルパスを作成
+    // 2. fs.readFileSyncでファイル内容を読み込み
+    // 3. gray-matterでfrontmatterとcontentを分離
+    // 4. remarkでMarkdownをHTMLに変換
+    // 5. PostData型のオブジェクトを返す
+
     const fullPath = path.join(postsDirectory, `${slug}.md`)
-    const fileContents = fs.readFileSync(fullPath, 'utf8')
+    // TODO: ファイルを読み込む
 
-    const { data, content } = matter(fileContents)
+    // TODO: gray-matterで解析
+    // const { data, content } = matter(fileContents);
 
-    const processedContent = await remark().use(html).process(content)
-    const contentHtml = processedContent.toString()
+    // TODO: MarkdownをHTMLに変換
+    // const processedContent = await remark()
+    //   .use(html)
+    //   .process(content);
 
-    return {
-      slug,
-      content: contentHtml,
-      title: data.title || 'Untitled',
-      date: data.date || new Date().toISOString(),
-      author: data.author || 'Anonymous',
-      tags: data.tags || [],
-      excerpt: data.excerpt || '',
-      coverImage: data.coverImage,
-      published: data.published ?? true,
-    }
+    // TODO: PostDataオブジェクトを返す
+    return null
   } catch (error) {
     console.error(`Error reading post ${slug}:`, error)
     return null
   }
 }
 
+// TODO: すべての記事を取得する関数を実装
 export async function getAllPosts(): Promise<PostData[]> {
-  const slugs = getAllPostSlugs()
-  const posts = await Promise.all(slugs.map((slug) => getPostBySlug(slug.slug)))
+  // ヒント:
+  // 1. getAllPostSlugs()で全スラッグを取得
+  // 2. 各スラッグに対してgetPostBySlug()を実行
+  // 3. nullを除外
+  // 4. publishedがtrueの記事のみフィルタリング
+  // 5. 日付順（新しい順）でソート
 
-  return posts
-    .filter((post): post is PostData => post !== null && post.published)
-    .sort((a, b) => (a.date > b.date ? -1 : 1))
+  return []
 }
 
+// TODO: 特定のタグを持つ記事を取得する関数を実装
 export async function getPostsByTag(tag: string): Promise<PostData[]> {
-  const posts = await getAllPosts()
-  return posts.filter((post) => post.tags.includes(tag))
+  // ヒント: getAllPosts()を使用してtagsにtagが含まれる記事をフィルタリング
+
+  return []
 }
 
+// TODO: すべてのタグを取得する関数を実装
 export function getAllTags(): string[] {
-  const slugs = getAllPostSlugs()
-  const tags = new Set<string>()
+  // ヒント:
+  // 1. すべての記事からタグを収集
+  // 2. Setを使用して重複を除去
+  // 3. ソートして返す
 
-  slugs.forEach(({ slug }) => {
-    const fullPath = path.join(postsDirectory, `${slug}.md`)
-    const fileContents = fs.readFileSync(fullPath, 'utf8')
-    const { data } = matter(fileContents)
-
-    if (data.tags && Array.isArray(data.tags)) {
-      data.tags.forEach((tag: string) => tags.add(tag))
-    }
-  })
-
-  return Array.from(tags).sort()
+  return []
 }

@@ -1,26 +1,10 @@
-export interface PostData {
-  slug: string
-  title: string
-  date: string
-  author: string
-  tags: string[]
-  excerpt: string
-  coverImage?: string
-  content: string
-  published: boolean
-}
+// TODO: ブログ記事のデータ型を定義してください
+export type PostData = {}
 
-export interface PostMeta {
-  slug: string
-  title: string
-  date: string
-  author: string
-  tags: string[]
-  excerpt: string
-  coverImage?: string
-  published: boolean
-}
+// TODO: 記事のメタデータ型を定義してください（contentを除く）
+export type PostMeta = {}
 
+// ページのメタデータ型（実装済み）
 export interface PageMetadata {
   title: string
   description: string

@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
+  pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    dirs: ['src'],
   },
   images: {
     domains: ['images.unsplash.com', 'via.placeholder.com'],

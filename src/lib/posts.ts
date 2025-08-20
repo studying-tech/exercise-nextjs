@@ -1,64 +1,46 @@
 import type { PostData } from '@/types'
 
+// TODO: 記事の読了時間を計算する関数を実装
 export function getReadingTime(content: string): number {
-  const wordsPerMinute = 200
-  const words = content.trim().split(/\s+/).length
-  return Math.ceil(words / wordsPerMinute)
+  // ヒント:
+  // 1. 1分間に読める単語数を200と仮定
+  // 2. contentから単語数をカウント（split(/\s+/)を使用）
+  // 3. Math.ceilで切り上げて分数を返す
+
+  return 5 // 仮の値
 }
 
+// TODO: 日付を日本語形式にフォーマットする関数を実装
 export function formatDate(dateString: string): string {
-  const date = new Date(dateString)
-  return new Intl.DateTimeFormat('ja-JP', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(date)
+  // ヒント:
+  // 1. new Date(dateString)で日付オブジェクトを作成
+  // 2. Intl.DateTimeFormatを使用して日本語形式にフォーマット
+  // 例: "2024年3月20日"
+
+  return dateString // 仮の値
 }
 
+// TODO: 関連記事を取得する関数を実装
 export function getRelatedPosts(currentPost: PostData, allPosts: PostData[], limit = 3): PostData[] {
-  const otherPosts = allPosts.filter((post) => post.slug !== currentPost.slug)
+  // ヒント:
+  // 1. 現在の記事以外の記事をフィルタリング
+  // 2. 各記事にスコアを付ける
+  //    - 共通のタグがある場合: +2点
+  //    - タイトルに共通の単語がある場合: +1点
+  // 3. スコアの高い順にソート
+  // 4. 上位limit件を返す
 
-  const scoredPosts = otherPosts.map((post) => {
-    let score = 0
-
-    currentPost.tags.forEach((tag) => {
-      if (post.tags.includes(tag)) {
-        score += 2
-      }
-    })
-
-    const titleWords = currentPost.title.toLowerCase().split(' ')
-    const postTitleWords = post.title.toLowerCase().split(' ')
-    titleWords.forEach((word) => {
-      if (postTitleWords.includes(word) && word.length > 3) {
-        score += 1
-      }
-    })
-
-    return { post, score }
-  })
-
-  return scoredPosts
-    .sort((a, b) => b.score - a.score)
-    .slice(0, limit)
-    .map((item) => item.post)
+  return []
 }
 
+// TODO: 記事内容から見出しを抽出する関数を実装
 export function extractHeadings(content: string): { id: string; text: string; level: number }[] {
-  const headingRegex = /<h([1-6]).*?>(.*?)<\/h[1-6]>/gi
-  const headings: { id: string; text: string; level: number }[] = []
-  let match
+  // ヒント:
+  // 1. 正規表現で<h1>～<h6>タグを検索
+  // 2. 各見出しから以下を抽出:
+  //    - level: 見出しレベル（1～6）
+  //    - text: 見出しテキスト（HTMLタグを除去）
+  //    - id: テキストからIDを生成（小文字、スペースをハイフンに）
 
-  while ((match = headingRegex.exec(content)) !== null) {
-    const level = Number.parseInt(match[1])
-    const text = match[2].replace(/<[^>]*>/g, '')
-    const id = text
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-')
-
-    headings.push({ id, text, level })
-  }
-
-  return headings
+  return []
 }
