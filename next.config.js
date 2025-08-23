@@ -1,8 +1,15 @@
+const rehypeHighlight = require('rehype-highlight')
+const rehypeSlug = require('rehype-slug')
+const rehypeAutolinkHeadings = require('rehype-autolink-headings')
+
 const withMDX = require('@next/mdx')({
   extension: /\.mdx?$/,
   options: {
     remarkPlugins: [],
-    rehypePlugins: [],
+    rehypePlugins: [
+      rehypeSlug,
+      rehypeHighlight
+    ],
   },
 })
 

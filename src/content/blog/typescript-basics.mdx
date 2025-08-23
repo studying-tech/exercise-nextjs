@@ -1,0 +1,286 @@
+---
+title: 'TypeScript の基本 - 型の力を理解しよう'
+date: '2025-08-23'
+author: 'Tech Blog編集部'
+coverImage: 'https://picsum.photos/seed/typescript-basics/800/400'
+tags: ['TypeScript', 'JavaScript', 'プログラミング', '型安全', '初心者']
+excerpt: 'TypeScriptの基本概念と型システムを初心者向けに解説。なぜTypeScriptが注目されているのか、実際のコード例とともに理解しましょう。'
+published: true
+---
+
+# TypeScript の基本 - 型の力を理解しよう
+
+プログラミング初心者の皆さん、**TypeScript**という名前を聞いたことはありますか？TypeScriptは、JavaScriptを拡張した言語で、現在多くの企業や開発者に愛用されています。今回は、TypeScriptの基本と「**型**」の重要性について、初心者にも分かりやすく解説します。
+
+## TypeScriptって何？
+
+<div className="bg-blue-50 p-6 rounded-lg border border-blue-200 my-6">
+  <h3 className="text-xl font-semibold text-blue-900 mb-3">🔍 TypeScriptは「JavaScriptに型を追加した言語」</h3>
+  <div className="text-blue-800">
+    料理のレシピを想像してください。普通のレシピ（JavaScript）だと「お砂糖を適量入れる」となっていますが、TypeScriptのレシピでは「お砂糖を大さじ2杯入れる」と具体的に書かれています。
+  </div>
+</div>
+
+### JavaScriptとTypeScriptの違い
+
+**JavaScript**（従来の書き方）：
+```javascript
+function greet(name) {
+  return "こんにちは、" + name + "さん！";
+}
+
+greet("田中");        // "こんにちは、田中さん！"
+greet(123);          // "こんにちは、123さん！" ← おかしい...
+greet();             // "こんにちは、undefinedさん！" ← エラー！
+```
+
+**TypeScript**（型を指定した書き方）：
+```typescript
+function greet(name: string): string {
+  return "こんにちは、" + name + "さん！";
+}
+
+greet("田中");        // ✅ 正常
+greet(123);          // ❌ エラー：数値は渡せません
+greet();             // ❌ エラー：引数が必要です
+```
+
+## 型（Type）って何？
+
+<div className="bg-yellow-50 p-6 rounded-lg border border-yellow-200 my-6">
+  <h4 className="text-lg font-semibold text-yellow-900 mb-3">📦 型は「データの種類を決めるルール」</h4>
+  <div className="text-yellow-800">
+    <strong>現実の例：</strong><br/>
+    • 郵便番号には「数字」しか入らない<br/>
+    • 名前には「文字」が入る<br/>
+    • 年齢には「正の整数」が入る<br/><br/>
+    プログラムでも同じように、データの種類を決めておくと間違いが減ります！
+  </div>
+</div>
+
+## TypeScriptの基本的な型
+
+### 1. 基本的な型
+
+```typescript
+// 文字列型
+let name: string = "田中太郎";
+let message: string = "こんにちは";
+
+// 数値型
+let age: number = 25;
+let price: number = 1500;
+
+// 真偽値型
+let isStudent: boolean = true;
+let hasLicense: boolean = false;
+
+// 配列型
+let fruits: string[] = ["りんご", "バナナ", "オレンジ"];
+let scores: number[] = [85, 92, 78, 96];
+```
+
+### 2. オブジェクト型
+
+実際のアプリケーションでよく使われるオブジェクト型を見てみましょう：
+
+```typescript
+// ユーザー情報の型を定義
+interface User {
+  name: string;
+  age: number;
+  email: string;
+  isActive: boolean;
+}
+
+// 型に合ったデータを作成
+const user: User = {
+  name: "田中太郎",
+  age: 28,
+  email: "tanaka@example.com",
+  isActive: true
+};
+```
+
+<div className="bg-green-50 p-6 rounded-lg border border-green-200 my-6">
+  <h4 className="text-lg font-semibold text-green-900 mb-4">👤 ユーザーカード（TypeScript版）</h4>
+  
+  <div className="bg-white p-4 rounded-lg shadow-md border max-w-sm">
+    <div className="flex items-center space-x-4">
+      <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
+        田
+      </div>
+      <div>
+        <h5 className="font-semibold text-gray-900">田中太郎</h5>
+        <p className="text-gray-600 text-sm">tanaka@example.com</p>
+        <p className="text-green-600 text-xs">✅ アクティブ</p>
+      </div>
+    </div>
+  </div>
+  
+  <div className="mt-4 text-sm text-gray-600">
+    ↑ このカードのデータは型安全に管理されています
+  </div>
+</div>
+
+## TypeScriptを使う3つの大きなメリット
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
+  <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+    <div className="text-2xl mb-2">🛡️</div>
+    <h4 className="font-semibold text-red-900 mb-2">エラーの予防</h4>
+    <div className="text-red-800 text-sm">
+      間違った型のデータを使おうとすると、実行前に教えてくれる
+    </div>
+  </div>
+  
+  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+    <div className="text-2xl mb-2">💡</div>
+    <h4 className="font-semibold text-blue-900 mb-2">開発効率UP</h4>
+    <div className="text-blue-800 text-sm">
+      エディターが自動補完や候補を提案してくれる
+    </div>
+  </div>
+  
+  <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+    <div className="text-2xl mb-2">📚</div>
+    <h4 className="font-semibold text-purple-900 mb-2">コードが読みやすい</h4>
+    <div className="text-purple-800 text-sm">
+      型情報がドキュメントの役割も果たす
+    </div>
+  </div>
+</div>
+
+## 実践例：ショッピングカート
+
+実際のWebアプリケーションで使われそうな例を見てみましょう：
+
+```typescript
+// 商品の型定義
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  inStock: boolean;
+}
+
+// カートアイテムの型定義
+interface CartItem {
+  product: Product;
+  quantity: number;
+}
+
+// ショッピングカートの関数
+function addToCart(product: Product, quantity: number): CartItem {
+  if (quantity <= 0) {
+    throw new Error("数量は1以上である必要があります");
+  }
+  
+  if (!product.inStock) {
+    throw new Error("この商品は在庫切れです");
+  }
+  
+  return {
+    product: product,
+    quantity: quantity
+  };
+}
+
+// 使用例
+const laptop: Product = {
+  id: 1,
+  name: "ノートパソコン",
+  price: 89800,
+  inStock: true
+};
+
+const cartItem = addToCart(laptop, 1);
+```
+
+## 初心者がつまずきやすいポイント
+
+<div className="bg-orange-50 p-6 rounded-lg border border-orange-200 my-6">
+  <h4 className="text-lg font-semibold text-orange-900 mb-3">⚠️ よくある間違いと解決方法</h4>
+  
+  <div className="space-y-4 text-orange-800">
+    <div>
+      <strong>1. 型エラーを無視してしまう</strong><br/>
+      ❌ <code>any</code> 型を多用する<br/>
+      ✅ 適切な型を指定する
+    </div>
+    
+    <div>
+      <strong>2. 型定義を書かない</strong><br/>
+      ❌ 型推論に任せっぱなし<br/>
+      ✅ 関数の引数と戻り値には型を明示
+    </div>
+    
+    <div>
+      <strong>3. interfaceとtypeの使い分け</strong><br/>
+      💡 <strong>初心者のうちは</strong> <code>interface</code> を使えばOK
+    </div>
+  </div>
+</div>
+
+## 実際のエラー例とその修正
+
+**エラーが出るコード：**
+```typescript
+function calculateTotal(items) {  // ← 型がない
+  return items.reduce((total, item) => {
+    return total + item.price * item.quantity;  // ← エラーの可能性
+  }, 0);
+}
+```
+
+**修正後のコード：**
+```typescript
+interface CartItem {
+  price: number;
+  quantity: number;
+}
+
+function calculateTotal(items: CartItem[]): number {
+  return items.reduce((total: number, item: CartItem) => {
+    return total + item.price * item.quantity;
+  }, 0);
+}
+```
+
+## 次のステップ
+
+TypeScriptの基本が理解できたら、次はこれらを学んでみましょう：
+
+<div className="bg-indigo-50 p-6 rounded-lg border border-indigo-200 my-6">
+  <h4 className="text-lg font-semibold text-indigo-900 mb-4">📚 TypeScript学習ロードマップ</h4>
+  
+  <div className="space-y-2 text-indigo-800">
+    <div>✅ <strong>基本的な型</strong> ← 今ここ！</div>
+    <div>⏳ <strong>ユニオン型・交差型</strong> - より柔軟な型定義</div>
+    <div>⏳ <strong>ジェネリクス</strong> - 再利用可能な型</div>
+    <div>⏳ <strong>React + TypeScript</strong> - コンポーネントの型安全</div>
+    <div>⏳ <strong>Next.js + TypeScript</strong> - 本格的なアプリ開発</div>
+  </div>
+</div>
+
+## まとめ
+
+**TypeScript**は、**型という「ルール」を追加することで、より安全で読みやすいコード**を書けるようにする言語です。
+
+<div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg border my-6">
+  <h4 className="text-lg font-semibold text-gray-900 mb-3">🎯 TypeScriptの本質</h4>
+  <div className="text-gray-800">
+    • <strong>エラーを事前に防げる</strong> - バグが減る<br/>
+    • <strong>開発効率が上がる</strong> - エディターのサポート<br/>
+    • <strong>チームでの開発がしやすい</strong> - 型がドキュメント代わり<br/>
+    • <strong>大規模なアプリに強い</strong> - コードの管理が楽
+  </div>
+</div>
+
+最初は「面倒だな」と感じるかもしれませんが、慣れてくるとTypeScriptなしでは開発できなくなるはずです。少しずつ学んでいきましょう！
+
+<div className="mt-8 p-4 bg-gray-50 rounded-lg border text-center">
+  <div className="text-sm text-gray-600">
+    🎯 この記事で学んだこと: TypeScriptの基本概念、型システム、実践的な使い方
+  </div>
+</div>

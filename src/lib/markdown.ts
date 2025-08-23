@@ -4,6 +4,11 @@ import path from 'path'
 import { remark } from 'remark'
 import html from 'remark-html'
 import { serialize } from 'next-mdx-remote/serialize'
+import rehypeHighlight from 'rehype-highlight'
+import remarkRehype from 'remark-rehype'
+import rehypeStringify from 'rehype-stringify'
+import rehypeSlug from 'rehype-slug'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import type { Post, PostData } from '@/types'
 
 const postsDirectory = path.join(process.cwd(), 'src/content/blog')
@@ -47,13 +52,25 @@ export async function getPostBySlug(slug: string): Promise<PostData | null> {
     let contentHtml: string
 
     if (isMdx) {
-      // MDXファイルの場合、next-mdx-remoteでシリアライズ
-      const mdxSource = await serialize(content)
+      // MDXファイルの場合、next-mdx-remoteでシリアライズ（ハイライト付き）
+      const mdxSource = await serialize(content, {
+        mdxOptions: {
+          rehypePlugins: [
+            rehypeSlug,
+            rehypeHighlight
+          ],
+        },
+      })
       // シリアライズされたMDXをHTMLとして扱う（実際の表示はMDXRemoteで行う）
       contentHtml = content // MDXの生のコンテンツを保持
     } else {
-      // Markdownファイルの場合、remarkでHTMLに変換
-      const processedContent = await remark().use(html).process(content)
+      // Markdownファイルの場合、remark + rehype でHTMLに変換（ハイライト付き）
+      const processedContent = await remark()
+        .use(remarkRehype)
+        .use(rehypeSlug)
+        .use(rehypeHighlight)
+        .use(rehypeStringify)
+        .process(content)
       contentHtml = processedContent.toString()
     }
 
@@ -61,6 +78,7 @@ export async function getPostBySlug(slug: string): Promise<PostData | null> {
     return {
       slug,
       content: contentHtml,
+      rawContent: content, // 生のMarkdownコンテンツを保存
       isMdx,
       ...(data as { [key: string]: any }),
     } as PostData

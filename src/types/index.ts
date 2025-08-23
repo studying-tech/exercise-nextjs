@@ -6,6 +6,7 @@ export interface PostData {
   author: string
   excerpt: string
   content: string
+  rawContent: string // 目次生成用の生のMarkdownコンテンツ
   coverImage?: string
   tags?: string[]
   published?: boolean

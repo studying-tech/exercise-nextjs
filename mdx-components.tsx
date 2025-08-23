@@ -1,19 +1,46 @@
 import type { MDXComponents } from 'mdx/types'
 
+// 文字列からslugを生成する関数
+function generateSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/g, '') // 英数字とひらがな・カタカナ・漢字のみ
+    .replace(/\s+/g, '-')
+    .trim()
+}
+
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
-    h1: ({ children }) => (
-      <h1 className="text-4xl font-bold mb-6 text-gray-900">{children}</h1>
-    ),
-    h2: ({ children }) => (
-      <h2 className="text-3xl font-semibold mb-4 text-gray-800">{children}</h2>
-    ),
-    h3: ({ children }) => (
-      <h3 className="text-2xl font-medium mb-3 text-gray-700">{children}</h3>
-    ),
-    p: ({ children }) => (
-      <p className="mb-4 text-gray-600 leading-relaxed">{children}</p>
-    ),
+    h1: ({ children }) => {
+      const id = typeof children === 'string' ? generateSlug(children) : undefined
+      return (
+        <h1 id={id} className="text-4xl font-bold mb-6 text-gray-900">
+          {children}
+        </h1>
+      )
+    },
+    h2: ({ children }) => {
+      const id = typeof children === 'string' ? generateSlug(children) : undefined
+      return (
+        <h2 id={id} className="text-3xl font-semibold mb-4 text-gray-800">
+          {children}
+        </h2>
+      )
+    },
+    h3: ({ children }) => {
+      const id = typeof children === 'string' ? generateSlug(children) : undefined
+      return (
+        <h3 id={id} className="text-2xl font-medium mb-3 text-gray-700">
+          {children}
+        </h3>
+      )
+    },
+    p: ({ children }) => {
+      // pタグの代わりにdivを使用してネストエラーを防ぐ
+      return (
+        <div className="mb-4 text-gray-600 leading-relaxed prose-p">{children}</div>
+      );
+    },
     ul: ({ children }) => (
       <ul className="list-disc list-inside mb-4 space-y-2 text-gray-600">{children}</ul>
     ),
@@ -33,24 +60,25 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </blockquote>
     ),
-    code: ({ children, ...props }) => {
-      // preタグ内のcodeタグかどうかを確認
-      const isInPre = props.className?.includes('language-');
+    code: ({ children, className, ...props }) => {
+      // preタグ内のcodeタグかどうかを確認（シンタックスハイライト用）
+      const isInPre = className?.includes('hljs') || className?.includes('language-');
       if (isInPre) {
         return (
-          <code className="text-white font-mono">
+          <code className={`${className || ''} block`} {...props}>
             {children}
           </code>
         );
       }
+      // インラインコード（CSSで既にスタイル適用済み）
       return (
-        <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono text-gray-800">
+        <code {...props}>
           {children}
         </code>
       );
     },
-    pre: ({ children }) => (
-      <pre className="bg-gray-900 text-white p-4 rounded-lg overflow-x-auto mb-4">
+    pre: ({ children, className }) => (
+      <pre className={`overflow-x-auto mb-6 text-sm leading-relaxed ${className || ''}`}>
         {children}
       </pre>
     ),

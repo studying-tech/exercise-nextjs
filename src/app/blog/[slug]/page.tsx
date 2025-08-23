@@ -11,6 +11,7 @@ import {
 import type { Metadata } from "next";
 import { ClockIcon } from "@heroicons/react/24/outline";
 import { PostCard } from "@/components/blog/PostCard"; // PostCardを追加
+import TableOfContentsInline from "@/components/blog/TableOfContentsInline";
 
 interface PageProps {
   params: {
@@ -111,28 +112,7 @@ export default async function PostPage({ params }: PageProps) {
         )}
       </header>
 
-      {headings.length > 0 && (
-        <nav className="mb-8 p-6 bg-gray-50 rounded-lg shadow-inner">
-          <h3 className="text-xl font-bold mb-4">目次</h3>
-          <ul className="list-disc list-inside space-y-2">
-            {headings.map((heading) => (
-              <li
-                key={heading.id}
-                className={`text-gray-700 text-base ml-${
-                  (heading.level - 2) * 4
-                }`}
-              >
-                <a
-                  href={`#${heading.id}`}
-                  className="text-blue-600 hover:underline"
-                >
-                  {heading.text}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      )}
+      <TableOfContentsInline content={post.rawContent} />
 
       <PostContent content={post.content} isMdx={post.isMdx} />
 

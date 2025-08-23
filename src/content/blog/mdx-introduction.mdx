@@ -27,9 +27,9 @@ published: true
 
 <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200 my-6">
   <h3 className="text-xl font-semibold text-blue-900 mb-3">✨ JSXの例</h3>
-  <p className="text-blue-800 mb-4">
+  <div className="text-blue-800 mb-4">
     これはMDX内で直接記述したJSXコンポーネントです。Tailwind CSSのクラスも使用できます。
-  </p>
+  </div>
   <div className="flex gap-2">
     <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm">React</span>
     <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm">MDX</span>
@@ -46,7 +46,7 @@ function MDXComponent() {
   return (
     <div className="p-4 bg-gray-100 rounded">
       <h2>Hello MDX!</h2>
-      <p>MarkdownとJSXの完璧な融合</p>
+      <span>MarkdownとJSXの完璧な融合</span>
     </div>
   );
 }
@@ -78,9 +78,9 @@ const post: BlogPost = {
       <span className="text-yellow-400">⚠️</span>
     </div>
     <div className="ml-3">
-      <p className="text-yellow-800">
+      <div className="text-yellow-800">
         <strong>注意:</strong> MDXファイルでは、JSXの記法に従ってclassNameを使用する必要があります。
-      </p>
+      </div>
     </div>
   </div>
 </div>
@@ -114,7 +114,7 @@ MDXを使用することで、従来のMarkdownでは実現できなかった：
 が可能になります。ブログ、ドキュメンテーション、チュートリアルなど、様々な場面でMDXの力を活用してください！
 
 <div className="mt-8 p-4 bg-gray-50 rounded-lg border">
-  <p className="text-sm text-gray-600 text-center">
+  <div className="text-sm text-gray-600 text-center">
     📝 この記事はMDX形式で作成されました
-  </p>
+  </div>
 </div>
