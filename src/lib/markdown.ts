@@ -3,12 +3,13 @@ import matter from 'gray-matter'
 import path from 'path'
 import { remark } from 'remark'
 import html from 'remark-html'
+import { serialize } from 'next-mdx-remote/serialize'
 import type { Post, PostData } from '@/types'
 
 const postsDirectory = path.join(process.cwd(), 'src/content/blog')
 
 /**
- * /src/content/blog 内のすべての .md ファイル名をslugとして取得
+ * /src/content/blog 内のすべての .md と .mdx ファイル名をslugとして取得
  */
 export function getAllPostSlugs(): string[] {
   if (!fs.existsSync(postsDirectory)) {
@@ -16,8 +17,8 @@ export function getAllPostSlugs(): string[] {
   }
   const fileNames = fs.readdirSync(postsDirectory)
   return fileNames
-    .filter((fileName) => fileName.endsWith('.md'))
-    .map((fileName) => fileName.replace(/\.md$/, ''))
+    .filter((fileName) => fileName.endsWith('.md') || fileName.endsWith('.mdx'))
+    .map((fileName) => fileName.replace(/\.(md|mdx)$/, ''))
 }
 
 /**
@@ -25,23 +26,42 @@ export function getAllPostSlugs(): string[] {
  */
 export async function getPostBySlug(slug: string): Promise<PostData | null> {
   try {
-    const fullPath = path.join(postsDirectory, `${slug}.md`)
+    // .md と .mdx の両方をチェック
+    let fullPath = path.join(postsDirectory, `${slug}.md`)
+    let isMdx = false
+    
+    if (!fs.existsSync(fullPath)) {
+      fullPath = path.join(postsDirectory, `${slug}.mdx`)
+      isMdx = true
+    }
+    
     if (!fs.existsSync(fullPath)) {
       return null
     }
+    
     const fileContents = fs.readFileSync(fullPath, 'utf8')
 
     // gray-matterでfrontmatterとcontentを解析
     const { data, content } = matter(fileContents)
 
-    // remarkでMarkdownをHTMLに変換
-    const processedContent = await remark().use(html).process(content)
-    const contentHtml = processedContent.toString()
+    let contentHtml: string
+
+    if (isMdx) {
+      // MDXファイルの場合、next-mdx-remoteでシリアライズ
+      const mdxSource = await serialize(content)
+      // シリアライズされたMDXをHTMLとして扱う（実際の表示はMDXRemoteで行う）
+      contentHtml = content // MDXの生のコンテンツを保持
+    } else {
+      // Markdownファイルの場合、remarkでHTMLに変換
+      const processedContent = await remark().use(html).process(content)
+      contentHtml = processedContent.toString()
+    }
 
     // PostDataオブジェクトとして返す
     return {
       slug,
       content: contentHtml,
+      isMdx,
       ...(data as { [key: string]: any }),
     } as PostData
   } catch (error) {

@@ -134,7 +134,7 @@ export default async function PostPage({ params }: PageProps) {
         </nav>
       )}
 
-      <PostContent content={post.content} />
+      <PostContent content={post.content} isMdx={post.isMdx} />
 
       {relatedPosts.length > 0 && (
         <section className="mt-12 pt-8 border-t border-gray-200">

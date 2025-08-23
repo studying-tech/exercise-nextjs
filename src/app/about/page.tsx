@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { ContactInfo } from "@/components/ContactInfo";
 
 export const metadata: Metadata = {
   title: "このサイトについて - Tech Blog",
@@ -82,10 +83,13 @@ export default function AboutPage() {
 
         {/* お問い合わせセクション */}
         <section>
-          <h2 className="text-2xl font-bold mb-4">お問い合わせ</h2>
-          <p>
-            ご意見やご質問がありましたら、後日設置予定のお問い合わせフォームをご利用ください。
-          </p>
+          <h2 className="text-2xl font-bold mb-6">お問い合わせ</h2>
+          <div className="bg-gray-50 p-6 rounded-lg">
+            <p className="mb-6 text-gray-600">
+              ご意見やご質問がありましたら、以下の方法でお気軽にご連絡ください。
+            </p>
+            <ContactInfo />
+          </div>
         </section>
       </div>
     </div>
