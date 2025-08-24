@@ -1,0 +1,113 @@
+---
+title: "React useState実践 - インタラクティブなカウンター"
+date: "2025-08-24"
+author: "Tech Blog編集部"
+coverImage: "https://picsum.photos/seed/usestate-demo/800/400"
+tags: ["React", "useState", "インタラクティブ", "デモ", "初心者"]
+excerpt: "useStateを使った実際に動くカウンターデモ。ボタンをクリックして、Reactの状態管理を体験してみましょう。"
+published: true
+---
+
+# React の useState 入門ガイド
+
+React で状態管理といえば最初に登場するのが **useState** フックです。関数コンポーネント内で状態を扱うために使います。
+
+「状態（state）」という概念は、ユーザーが入力した情報やボタンをクリックした回数など、アプリケーション内で変化するデータを保持するために必要不可欠です。
+
+## React useState 実践 - インタラクティブなカウンター
+
+React の**useState**を実際に体験してみましょう！下のカウンターは完全に React の useState で動作しています。
+
+## 実際に動くカウンター
+
+<SimpleCounter />
+
+このカウンターのコードは以下のようになっています
+
+```javascript
+"use client";
+import { useState } from "react";
+
+export default function SimpleCounter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <div className="text-4xl font-mono font-bold">{count}</div>
+      <div className="space-x-4">
+        <button onClick={() => setCount(count + 1)}>増加</button>
+        <button onClick={() => setCount(count - 1)}>減少</button>
+        <button onClick={() => setCount(0)}>リセット</button>
+      </div>
+    </div>
+  );
+}
+```
+
+## useState の基本
+
+### 1. 状態の宣言
+
+```javascript
+const [count, setCount] = useState(0);
+```
+
+この 1 行で：
+
+- `count`: 現在の値
+- `setCount`: 値を更新する関数
+- `useState(0)`: 初期値を 0 に設定
+
+### 2. 状態の表示
+
+```javascript
+<div>{count}</div>
+```
+
+### 3. 状態の更新
+
+```javascript
+<button onClick={() => setCount(count + 1)}>増加</button>
+```
+
+## なぜ useState が必要なのか？
+
+普通の変数では、値が変わっても画面は更新されません：
+
+```javascript
+// ❌ 動かない例
+function BadCounter() {
+  let count = 0; // 普通の変数
+
+  return (
+    <div>
+      <div>{count}</div>
+      <button onClick={() => count++}>増加（動かない！）</button>
+    </div>
+  );
+}
+```
+
+useState を使うと、値が変わったときに自動で画面が更新されます：
+
+```javascript
+// ✅ 正しい例
+function GoodCounter() {
+  const [count, setCount] = useState(0); // useState
+
+  return (
+    <div>
+      <div>{count}</div>
+      <button onClick={() => setCount(count + 1)}>増加（動く！）</button>
+    </div>
+  );
+}
+```
+
+## まとめ
+
+useState は：
+
+- ✅ **状態管理** - コンポーネントの値を管理
+- ✅ **自動更新** - 値が変わると画面も更新
+- ✅ **簡単** - 宣言するだけで使用可能
