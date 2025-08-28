@@ -2,7 +2,7 @@
 title: "Tailwind CSS入門"
 date: "2025-08-23"
 author: "Tech Blog編集部"
-coverImage: "https://picsum.photos/seed/tailwind-css/800/400"
+coverImage: "images/blog-image6.jpg"
 tags: ["Tailwind CSS", "CSS", "デザイン", "スタイリング", "初心者"]
 excerpt: "Tailwind CSSとは何か？従来のCSSとの違い、メリット・デメリット、実際の使い方まで、プログラミング初心者にも分かりやすく解説します。"
 published: true

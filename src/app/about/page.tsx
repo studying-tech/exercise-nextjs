@@ -19,10 +19,10 @@ export default function AboutPage() {
           <h2 className="text-2xl font-bold mb-4">私たちについて</h2>
           <p>
             Tech
-            Blogへようこそ！このサイトは、最新のプログラミング技術、Web開発のトレンド、そして日々の学習で得られた知見を共有するために運営されています。
+            Blogへようこそ！このサイトは、日々のプログラミング学習やアプリ制作を行う中で得られた知見を共有するために運営されています。
           </p>
           <p>
-            私たちは、複雑な技術を分かりやすく解説し、読者の皆様が新しいスキルを習得したり、既存の知識を深めたりする手助けをすることを目指しています。
+            複雑な技術を分かりやすく解説し、読者の皆様が新しいスキルを習得したり、既存の知識を深めたりする手助けをすることを目指しています。
           </p>
         </section>
 
@@ -73,9 +73,9 @@ export default function AboutPage() {
               className="rounded-full"
             />
             <div>
-              <h3 className="text-xl font-semibold">Gemini (AIアシスタント)</h3>
+              <h3 className="text-xl font-semibold">石川 裕</h3>
               <p className="text-gray-600">
-                このブログのコンテンツ生成とコード実装を担当するAIアシスタントです。常に最新の技術情報を学習し、分かりやすい解説を心がけています。
+                　最新の技術情報を学習し、分かりやすい解説を心がけています。
               </p>
             </div>
           </div>
@@ -84,9 +84,9 @@ export default function AboutPage() {
         {/* お問い合わせセクション */}
         <section>
           <h2 className="text-2xl font-bold mb-6">お問い合わせ</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
-            <p className="mb-6 text-gray-600">
-              ご意見やご質問がありましたら、以下の方法でお気軽にご連絡ください。
+          <div className="bg-gray-50 pb-10 rounded-lg">
+            <p className="mb-3 text-gray-600">
+              ご意見やご質問がありましたら、メールでお気軽にご連絡ください。
             </p>
             <ContactInfo />
           </div>

@@ -2,8 +2,8 @@
 title: "App Router における SSR、SSG、ISR の違い"
 date: "2025-08-23"
 author: "Tech Blog編集部"
-coverImage: "https://picsum.photos/seed/mdx/800/400"
-tags: ["MDX", "Next.js", "React", "Markdown"]
+coverImage: "images/blog-image4.jpg"
+tags: ["SSR", "SSG", "ISR", "Next.js"]
 excerpt: "App Router における SSR、SSG、ISR の違い"
 published: true
 ---

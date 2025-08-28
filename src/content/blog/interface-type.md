@@ -2,8 +2,8 @@
 title: "interfaceとtypeをどう使い分けるか"
 date: "2025-08-28"
 author: "Tech Blog編集部"
-coverImage: "https://picsum.photos/seed/mdx/800/400"
-tags: ["interface", "Next.js", "React", "type"]
+coverImage: "images/blog-image2.jpg"
+tags: ["interface", "type", "Next.js", "React"]
 excerpt: "MDXを使ってMarkdownとJSXを組み合わせた高機能なブログ記事の作成方法を学びましょう。"
 published: true
 ---

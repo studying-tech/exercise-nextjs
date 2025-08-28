@@ -2,7 +2,7 @@
 title: "タプル型とユニオン型を理解しよう"
 date: "2025-08-27"
 author: "Tech Blog編集部"
-coverImage: "https://picsum.photos/seed/mdx/800/400"
+coverImage: "images/blog-image1.jpg"
 tags: ["tuple", "union", "Next.js", "React", "type"]
 excerpt: "MDXを使ってMarkdownとJSXを組み合わせた高機能なブログ記事の作成方法を学びましょう。"
 published: true

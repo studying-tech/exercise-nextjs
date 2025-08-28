@@ -1,14 +1,14 @@
 ---
-title: "Next.js入門 - 初めてのWebアプリケーション"
+title: "Next.js入門"
 date: "2025-08-23"
 author: "Tech Blog編集部"
-coverImage: "https://picsum.photos/seed/nextjs-intro/800/400"
+coverImage: "images/blog-image3.jpg"
 tags: ["Next.js", "React", "Web開発", "フルスタック", "初心者"]
 excerpt: "Next.jsとは何か？なぜ人気なのか？初心者向けにNext.jsの基本概念とWebアプリケーション開発の始め方を分かりやすく解説します。"
 published: true
 ---
 
-# Next.js 入門 - 初めての Web アプリケーション
+# Next.js 入門
 
 私は今スタンディングで、React フレームワークの一つ**Next.js**を学んでいま。Next.js は人気のあるフレームワークで、Netflix、TikTok、Hulu など多くの大企業が採用しています。今回は、Next.js の基本概念などをまとめました。
 
