@@ -66,10 +66,13 @@ export async function getPostBySlug(slug: string): Promise<PostData | null> {
     } else {
       // Markdownファイルの場合、remark + rehype でHTMLに変換（ハイライト付き）
       const processedContent = await remark()
-        .use(remarkRehype)
+        .use(remarkRehype, { allowDangerousHtml: true })
         .use(rehypeSlug)
-        .use(rehypeHighlight)
-        .use(rehypeStringify)
+        .use(rehypeHighlight, {
+          detect: true,
+          subset: false
+        })
+        .use(rehypeStringify, { allowDangerousHtml: true })
         .process(content)
       contentHtml = processedContent.toString()
     }

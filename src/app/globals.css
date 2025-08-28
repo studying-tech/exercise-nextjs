@@ -8,7 +8,7 @@
 @tailwind utilities;
 
 /* Syntax highlighting styles */
-@import 'highlight.js/styles/atom-one-dark.css';
+@import 'highlight.js/styles/vs2015.css';
 
 /* 見出しのスムーススクロール対応 */
 @layer components {
@@ -31,9 +31,9 @@
   }
 }
 
-/* カスタムコードブロックスタイル */
+/* カスタムコードブロックスタイル（ダークテーマ） */
 @layer components {
-  /* preタグ内のコードブロック（黒背景・カラーハイライト） */
+  /* preタグ内のコードブロック（ダーク背景・見やすい色） */
   pre {
     background: #1e1e1e !important;
     padding: 1.5rem !important;
@@ -51,6 +51,7 @@
     border: none !important;
     border-radius: 0 !important;
     display: block !important;
+    color: #d4d4d4 !important;
   }
   
   .hljs {
@@ -63,7 +64,7 @@
     border-radius: 0 !important;
   }
   
-  /* より鮮やかな色設定（preタグ内のみ） */
+  /* 見やすい色設定（ダーク背景用） */
   pre .hljs-keyword,
   pre .hljs-selector-tag,
   pre .hljs-literal,
@@ -74,14 +75,16 @@
   pre code .hljs-literal,
   pre code .hljs-section,
   pre code .hljs-link {
-    color: #569cd6 !important; /* 青 */
+    color: #569cd6 !important; /* 明るい青 */
+    font-weight: 600 !important;
   }
   
   pre .hljs-string,
   pre .hljs-attr,
   pre code .hljs-string,
   pre code .hljs-attr {
-    color: #ce9178 !important; /* オレンジ */
+    color: #d69e2e !important; /* 明るい黄色 */
+    font-weight: 500 !important;
   }
   
   pre .hljs-number,
@@ -90,7 +93,7 @@
   pre code .hljs-number,
   pre code .hljs-regexp,
   pre code .hljs-built_in {
-    color: #b5cea8 !important; /* 緑 */
+    color: #b5cea8 !important; /* 薄緑 */
   }
   
   pre .hljs-function,
@@ -99,14 +102,15 @@
   pre code .hljs-function,
   pre code .hljs-title,
   pre code .hljs-class {
-    color: #dcdcaa !important; /* 黄色 */
+    color: #dcdcaa !important; /* 薄黄 */
+    font-weight: 600 !important;
   }
   
   pre .hljs-comment,
   pre .hljs-quote,
   pre code .hljs-comment,
   pre code .hljs-quote {
-    color: #6a9955 !important; /* 薄い緑 */
+    color: #6a9955 !important; /* 薄緑 */
     font-style: italic !important;
   }
   
@@ -121,56 +125,7 @@
   pre .hljs-attribute,
   pre code .hljs-property,
   pre code .hljs-attribute {
-    color: #f44747 !important; /* 赤 */
-  }
-  
-  /* 記号類の色設定 */
-  pre .hljs-punctuation,
-  pre .hljs-operator,
-  pre .hljs-params,
-  pre code .hljs-punctuation,
-  pre code .hljs-operator,
-  pre code .hljs-params {
-    color: #d4d4d4 !important; /* 明るいグレー */
-  }
-  
-  /* 括弧類 */
-  pre .hljs-bracket,
-  pre .hljs-brace,
-  pre code .hljs-bracket,
-  pre code .hljs-brace {
-    color: #ffd700 !important; /* ゴールド */
-  }
-  
-  /* その他の記号（基本テキストカラー） */
-  pre code,
-  .hljs {
-    color: #d4d4d4 !important; /* 基本の明るいグレー */
-  }
-  
-  /* 特定の記号を強制的に色付け（JavaScriptでよく使われる記号） */
-  pre code {
-    color: #d4d4d4 !important;
-  }
-  
-  /* highlight.jsでクラス付けされない記号の強制色付け */
-  pre::after,
-  pre::before {
-    color: #d4d4d4 !important;
-  }
-  
-  /* JavaScriptでよく使われる記号類の追加スタイル */
-  pre .hljs-symbol,
-  pre .hljs-meta,
-  pre code .hljs-symbol,
-  pre code .hljs-meta {
-    color: #d4d4d4 !important;
-  }
-  
-  /* 型注釈記号 */
-  pre .hljs-type,
-  pre code .hljs-type {
-    color: #4ec9b0 !important; /* 青緑 */
+    color: #92c5f7 !important; /* 明るい青 */
   }
   
   /* インラインコード用スタイル（明るい背景） */

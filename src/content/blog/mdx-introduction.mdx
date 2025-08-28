@@ -1,43 +1,55 @@
 ---
-title: 'MDXでリッチなブログ記事を作成する'
-date: '2025-08-23'
-author: 'Tech Blog編集部'
-coverImage: 'https://picsum.photos/seed/mdx/800/400'
-tags: ['MDX', 'Next.js', 'React', 'Markdown']
-excerpt: 'MDXを使ってMarkdownとJSXを組み合わせた高機能なブログ記事の作成方法を学びましょう。'
+title: "MDXでリッチなブログ記事を作成する"
+date: "2025-08-23"
+author: "Tech Blog編集部"
+coverImage: "https://picsum.photos/seed/mdx/800/400"
+tags: ["MDX", "Next.js", "React", "Markdown"]
+excerpt: "MDXを使ってMarkdownとJSXを組み合わせた高機能なブログ記事の作成方法を学びましょう。"
 published: true
 ---
 
-# MDXでリッチなブログ記事を作成する
+# MDX でリッチなブログ記事を作成する
 
-**MDX**は、MarkdownにJSXを埋め込むことができる強力な技術です。通常のMarkdown記法を使いながら、Reactコンポーネントを直接記述できるため、インタラクティブで視覚的に魅力的なコンテンツを作成できます。
+**MDX**は、Markdown に JSX を埋め込むことができる技術です。 Markdown より豊かなコンテンツの作成が可能になります。
 
-## MDXの特徴
+## MDX の特徴
 
-### 1. Markdown記法がそのまま使える
+### 1. Markdown 記法がそのまま使える
 
-通常のMarkdown記法はすべて利用可能です：
+通常の Markdown 記法はすべて利用可能です：
 
 - **太字**や*斜体*
 - リスト項目
 - `インラインコード`
 - [リンク](https://mdxjs.com/)
 
-### 2. JSXコンポーネントの埋め込み
+### 2.コンポーネントの埋め込み
+
+<SimpleCounter />
+
+### 3. JSX の使用
+
+できる
 
 <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200 my-6">
   <h3 className="text-xl font-semibold text-blue-900 mb-3">✨ JSXの例</h3>
   <div className="text-blue-800 mb-4">
-    これはMDX内で直接記述したJSXコンポーネントです。Tailwind CSSのクラスも使用できます。
+    これはMDX内で直接記述したJSXです。Tailwind CSSのクラスも使用できます。
   </div>
   <div className="flex gap-2">
-    <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm">React</span>
-    <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm">MDX</span>
-    <span className="bg-purple-500 text-white px-3 py-1 rounded-full text-sm">Next.js</span>
+    <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm">
+      React
+    </span>
+    <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm">
+      MDX
+    </span>
+    <span className="bg-purple-500 text-white px-3 py-1 rounded-full text-sm">
+      Next.js
+    </span>
   </div>
 </div>
 
-### 3. コードブロック
+### 4. コードブロック
 
 JavaScript、TypeScript、その他の言語のコードも美しく表示されます：
 
@@ -64,13 +76,11 @@ const post: BlogPost = {
   title: "MDX入門",
   date: "2025-08-23",
   author: "開発者",
-  content: "MDXは素晴らしい技術です"
+  content: "MDXは素晴らしい技術です",
 };
 ```
 
-## 実践的な使用例
-
-### アラートボックス
+### 5. アラートボックス
 
 <div className="border-l-4 border-yellow-400 bg-yellow-50 p-4 my-4">
   <div className="flex">
@@ -79,42 +89,22 @@ const post: BlogPost = {
     </div>
     <div className="ml-3">
       <div className="text-yellow-800">
-        <strong>注意:</strong> MDXファイルでは、JSXの記法に従ってclassNameを使用する必要があります。
+        <strong>注意:</strong>
+        {
+          "MDXファイルでは、JSXの記法に従ってclassNameを使用する必要があります。"
+        }
       </div>
     </div>
   </div>
 </div>
 
-### 統計表示
-
-<div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
-  <div className="bg-white p-6 rounded-lg shadow-md border text-center">
-    <div className="text-3xl font-bold text-blue-600 mb-2">100%</div>
-    <div className="text-gray-600">Markdown互換</div>
-  </div>
-  <div className="bg-white p-6 rounded-lg shadow-md border text-center">
-    <div className="text-3xl font-bold text-green-600 mb-2">∞</div>
-    <div className="text-gray-600">カスタマイズ可能</div>
-  </div>
-  <div className="bg-white p-6 rounded-lg shadow-md border text-center">
-    <div className="text-3xl font-bold text-purple-600 mb-2">⚡</div>
-    <div className="text-gray-600">高速レンダリング</div>
-  </div>
-</div>
-
 ## まとめ
 
-MDXを使用することで、従来のMarkdownでは実現できなかった：
+MDX を使用することで、従来の Markdown では実現できなかった：
 
-1. **インタラクティブなUI要素**の埋め込み
+1. **インタラクティブな UI 要素**の埋め込み
 2. **動的なデータ表示**
 3. **カスタムスタイリング**
 4. **コンポーネントの再利用**
 
-が可能になります。ブログ、ドキュメンテーション、チュートリアルなど、様々な場面でMDXの力を活用してください！
-
-<div className="mt-8 p-4 bg-gray-50 rounded-lg border">
-  <div className="text-sm text-gray-600 text-center">
-    📝 この記事はMDX形式で作成されました
-  </div>
-</div>
+が可能になります。ブログ、ドキュメンテーション、チュートリアルなど、様々な場面で MDX の力を活用してください！

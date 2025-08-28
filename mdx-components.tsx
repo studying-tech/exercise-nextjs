@@ -1,4 +1,5 @@
 import type { MDXComponents } from 'mdx/types'
+import Counter from '@/components/interactive/Counter'
 
 // 文字列からslugを生成する関数
 function generateSlug(text: string): string {
@@ -82,6 +83,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </pre>
     ),
+    Counter,
     ...components,
   }
 }
