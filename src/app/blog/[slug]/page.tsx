@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { PostContent } from "@/components/blog/PostContent";
 import { getAllPostSlugs, getPostBySlug, getAllPosts } from "@/lib/markdown"; // getAllPostsを追加
@@ -65,16 +66,20 @@ export default async function PostPage({ params }: PageProps) {
   const readingTime = getReadingTime(post.content);
   const relatedPosts = getRelatedPosts(post, allPosts); // 関連記事を取得
 
-  const headings = extractHeadings(post.content); // 見出しを抽出
+  const headings = extractHeadings(post.content, post.isMdx); // 見出しを抽出
 
   return (
     <article className="container mx-auto px-4 py-8 max-w-4xl">
       {post.coverImage && (
-        <img
-          src={post.coverImage}
-          alt={`${post.title}のカバー画像`}
-          className="w-full h-auto max-h-[500px] object-cover rounded-lg mb-8 shadow-lg"
-        />
+        <div className="relative w-full h-[400px] mb-8">
+          <Image
+            src={post.coverImage.startsWith('/') ? post.coverImage : `/${post.coverImage}`}
+            alt={`${post.title}のカバー画像`}
+            fill
+            className="object-cover rounded-lg shadow-lg"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+          />
+        </div>
       )}
 
       <header className="mb-8">
@@ -112,7 +117,7 @@ export default async function PostPage({ params }: PageProps) {
         )}
       </header>
 
-      <TableOfContentsInline content={post.rawContent} />
+      <TableOfContentsInline headings={headings} />
 
       <PostContent content={post.content} isMdx={post.isMdx} />
 

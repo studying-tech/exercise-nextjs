@@ -79,32 +79,47 @@ export function getRelatedPosts(currentPost: PostData, allPosts: PostData[], lim
 
 /**
  * 記事内容から見出しを抽出し、目次用のデータを生成する
- * @param content - HTMLコンテンツ文字列
+ * @param content - HTMLコンテンツ文字列またはMarkdownコンテンツ文字列
+ * @param isRawMarkdown - 生のMarkdownかどうか（MDXファイルの場合true）
  * @returns 見出しの配列（id, text, level）
  */
-export function extractHeadings(content: string): { id: string; text: string; level: number }[] {
+export function extractHeadings(content: string, isRawMarkdown = false): { id: string; text: string; level: number }[] {
   const headings: { id: string; text: string; level: number }[] = [];
-  // 正規表現で<h1>～<h6>タグを検索 (属性を考慮)
-  const regex = /<h([1-6])(?:[^>]*)>(.*?)<\/h\1>/g; // 修正された正規表現
-  let match;
 
-  while ((match = regex.exec(content)) !== null) {
-    const level = parseInt(match[1], 10); // 見出しレベル (1～6)
-    const rawText = match[2]; // 見出しのHTMLを含むテキスト
+  if (isRawMarkdown) {
+    // Markdown形式の見出しを検索する正規表現
+    const regex = /^(#{1,6})\s+(.+)$/gm;
+    let match;
 
-    // HTMLタグを除去して純粋なテキストを取得
-    const text = rawText.replace(/<[^>]*>/g, '');
+    while ((match = regex.exec(content)) !== null) {
+      const level = match[1].length; // # の数が見出しレベル
+      const text = match[2].trim(); // 見出しテキスト
+      
+      // IDを生成（rehypeSlugと同じロジックで生成）
+      const id = text
+        .toLowerCase()
+        .replace(/\s+/g, '-') // スペースをハイフンに
+        .replace(/[^\w\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF-]/g, '') // 日本語文字と英数字、ハイフンのみ残す
+        .replace(/-+/g, '-') // 連続するハイフンを一つに
+        .replace(/^-|-$/g, '') // 先頭・末尾のハイフンを削除
 
-    // テキストからIDを生成（より堅牢に）
-    const id = text.toLowerCase()
-                  .replace(/[^a-z0-9\s-]/g, '') // 英数字、スペース、ハイフン以外を除去
-                  .replace(/\s+/g, '-') // 複数のスペースを単一ハイフンに
-                  .replace(/^-+|-+$/g, ''); // 先頭・末尾のハイフンを除去
+      headings.push({ id, text, level });
+    }
+  } else {
+    // HTML形式の見出しを検索する正規表現
+    const regex = /<h([1-6])[^>]*id=["']([^"']+)["'][^>]*>(.*?)<\/h\1>/g;
+    let match;
 
-    // IDが空の場合のフォールバック（例: 見出しが記号だけの場合など）
-    const finalId = id || `heading-${headings.length}`; // headings.lengthは現在の配列の長さなのでユニークになる
+    while ((match = regex.exec(content)) !== null) {
+      const level = parseInt(match[1], 10); // 見出しレベル (1～6)
+      const id = match[2]; // 既存のID属性を使用
+      const rawText = match[3]; // 見出しのHTMLを含むテキスト
 
-    headings.push({ id: finalId, text, level });
+      // HTMLタグを除去して純粋なテキストを取得
+      const text = rawText.replace(/<[^>]*>/g, '');
+
+      headings.push({ id, text, level });
+    }
   }
 
   return headings;

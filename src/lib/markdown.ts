@@ -52,17 +52,8 @@ export async function getPostBySlug(slug: string): Promise<PostData | null> {
     let contentHtml: string
 
     if (isMdx) {
-      // MDXファイルの場合、next-mdx-remoteでシリアライズ（ハイライト付き）
-      const mdxSource = await serialize(content, {
-        mdxOptions: {
-          rehypePlugins: [
-            rehypeSlug,
-            rehypeHighlight
-          ],
-        },
-      })
-      // シリアライズされたMDXをHTMLとして扱う（実際の表示はMDXRemoteで行う）
-      contentHtml = content // MDXの生のコンテンツを保持
+      // MDXファイルの場合、生のコンテンツをそのまま返す
+      contentHtml = content
     } else {
       // Markdownファイルの場合、remark + rehype でHTMLに変換（ハイライト付き）
       const processedContent = await remark()
