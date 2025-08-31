@@ -8,15 +8,15 @@ excerpt: "Reactの基本フック「useState」の使い方を、動くコード
 published: true
 ---
 
-# 【React 入門】useState を完全理解！対話的な UI を作ろう 🚀
+# 【React 入門】useState を完全理解！対話的な UI を作ろう
 
 React でユーザーの操作によって見た目が変わる「動的なコンポーネント」を作るとき、絶対に欠かせないのが **`useState`** フックです。この記事では、`useState` がなぜ必要なのか、そしてどうやって使うのかを、具体的なコードを交えながら見ていきましょう！
 
-まずは実際に動くカウンターを触ってみてください：
+まずは実際に動くカウンターを触ってみてください
 
 <SimpleCounter />
 
-## useState って何？ 🤔
+## useState って何？
 
 `useState` は、一言でいうと **「コンポーネントに"記憶力"を与える魔法」** です。
 
@@ -106,13 +106,13 @@ function GreetingForm() {
 }
 ```
 
-## なぜ普通の変数ではダメなの？ 🤷‍♀️
+## なぜ普通の変数ではダメなの？
 
 初心者の方によくある疑問：「なんで普通の変数じゃダメなの？」
 
-答えは**「React が変更を検知できないから」**です。
+答えは **「React が変更を検知できないから」** です。
 
-### ❌ 普通の変数の場合
+### 普通の変数の場合
 
 ```javascript
 // これは動かない！
@@ -229,37 +229,144 @@ function UserProfile() {
 
 ### 1. 状態の更新は非同期
 
+React の状態更新は**非同期**で行われます。これは「setState を呼んでも、すぐには値が変わらない」ということです。
+
 ```javascript
 function AsyncUpdate() {
   const [count, setCount] = useState(0);
 
   const handleClick = () => {
+    console.log("更新前:", count); // 例：0
     setCount(count + 1);
-    console.log(count); // まだ古い値！
+    console.log("更新後（のはず）:", count); // でもまだ0！
 
-    // 正しい方法：useEffectを使用
-    // または関数型の更新を使用
+    // setState は非同期なので、console.log の時点では
+    // まだ古い値のままです
   };
+
+  return (
+    <div>
+      <p>カウント: {count}</p>
+      <button onClick={handleClick}>クリック</button>
+    </div>
+  );
+}
+```
+
+**なぜ非同期なのか？**
+
+React は複数の状態更新をまとめて処理することで、パフォーマンスを向上させています。この仕組みを「バッチング」と呼びます。
+
+**正しい対処法：**
+
+```javascript
+function CorrectAsyncHandling() {
+  const [count, setCount] = useState(0);
+
+  const handleClick = () => {
+    // 方法1：関数型の更新を使用
+    setCount((prevCount) => {
+      console.log("現在の値:", prevCount);
+      return prevCount + 1;
+    });
+
+    // 方法2：useEffect で状態変化を監視
+    // useEffect(() => {
+    //   console.log("countが変更されました:", count);
+    // }, [count]);
+  };
+
+  return (
+    <div>
+      <p>カウント: {count}</p>
+      <button onClick={handleClick}>クリック</button>
+    </div>
+  );
 }
 ```
 
 ### 2. オブジェクトの更新は浅いコピーで
 
+「浅いコピー」とは、オブジェクトの最上位のプロパティのみをコピーし、ネストされたオブジェクトは参照をコピーする方法です。
+
+**浅いコピーと深いコピーの違い：**
+
 ```javascript
-// ❌ ダメな例：直接変更
-const updateUser = () => {
-  user.name = "新しい名前";
-  setUser(user); // Reactは変更を検知しない
+// 元のオブジェクト
+const originalUser = {
+  name: "田中",
+  address: {
+    city: "東京",
+    country: "日本",
+  },
 };
 
-// ✅ 正しい例：新しいオブジェクトを作成
-const updateUser = () => {
-  setUser({
-    ...user,
-    name: "新しい名前",
-  });
-};
+// 浅いコピー（...スプレッド演算子）
+const shallowCopy = { ...originalUser };
+shallowCopy.name = "佐藤"; // これは大丈夫
+shallowCopy.address.city = "大阪"; // これは危険！
+
+console.log(originalUser.address.city); // "大阪" になってしまう
 ```
+
+**React での正しいオブジェクト更新：**
+
+```javascript
+function UserManagement() {
+  const [user, setUser] = useState({
+    name: "田中",
+    profile: {
+      age: 25,
+      city: "東京",
+    },
+  });
+
+  // ❌ ダメな例：直接変更
+  const badUpdate = () => {
+    user.name = "佐藤"; // 直接変更
+    setUser(user); // Reactは変更を検知しない
+  };
+
+  // ✅ 良い例：浅いコピーで更新
+  const goodUpdate = () => {
+    setUser({
+      ...user, // 既存のプロパティをコピー
+      name: "佐藤", // nameだけを更新
+    });
+  };
+
+  // ✅ ネストされたオブジェクトの更新
+  const updateNestedObject = () => {
+    setUser({
+      ...user,
+      profile: {
+        ...user.profile, // profileオブジェクトも浅いコピー
+        city: "大阪",
+      },
+    });
+  };
+
+  return (
+    <div>
+      <p>名前: {user.name}</p>
+      <p>年齢: {user.profile.age}</p>
+      <p>都市: {user.profile.city}</p>
+      <button onClick={goodUpdate}>名前を変更</button>
+      <button onClick={updateNestedObject}>都市を変更</button>
+    </div>
+  );
+}
+```
+
+**なぜ浅いコピーが重要なのか：**
+
+1. **React の変更検知** - React は参照の変更をチェックして再レンダリングを判断します
+2. **予期しない副作用の防止** - 元のオブジェクトを変更してしまうバグを防げます
+3. **パフォーマンス最適化** - メモ化（useMemo、React.memo）との相性が良くなります
+
+**浅いコピーの制限：**
+
+ネストが深いオブジェクトの場合、全ての階層で浅いコピーが必要になります。非常に深い場合は、immutability-helper や Immer などのライブラリの使用を検討しましょう。
 
 ## まとめ
 
@@ -273,4 +380,4 @@ const updateUser = () => {
 
 React の `useState` をマスターすれば、ユーザーの操作に応じて動的に変わる魅力的な UI を作ることができるようになります。
 
-今回学んだ内容を活かして、ぜひ自分だけのインタラクティブなコンポーネントを作ってみてください！まずは簡単なカウンターから始めて、徐々に複雑な状態管理にチャレンジしていきましょう。 🎉
+今回学んだ内容を活かして、ぜひ自分だけのインタラクティブなコンポーネントを作ってみてください！まずは簡単なカウンターから始めて、徐々に複雑な状態管理にチャレンジしていきましょう。
