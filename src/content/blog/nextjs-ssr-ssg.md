@@ -4,7 +4,7 @@ date: "2025-08-23"
 author: "Tech Blog編集部"
 coverImage: "images/blog-image4.jpg"
 tags: ["SSR", "SSG", "ISR", "Next.js"]
-excerpt: "App Router における SSR、SSG、ISR の違い"
+excerpt: "App Router における SSR、SSG、ISR の違いと実装方法についてまとめました。"
 published: true
 ---
 

@@ -5,25 +5,20 @@ interface TocItem {
 }
 
 interface TableOfContentsInlineProps {
-  content: string
+  headings: { id: string; text: string; level: number }[]
 }
 
-export default function TableOfContentsInline({ content }: TableOfContentsInlineProps) {
-  const headings: TocItem[] = []
-
-  // 生のMarkdownコンテンツから見出しを抽出
-  const headingRegex = /^(#{1,3})\s+(.+)$/gm
-  let match
-  while ((match = headingRegex.exec(content)) !== null) {
-    const level = match[1].length
-    const title = match[2].trim()
-    const id = generateSlug(title)
-    headings.push({ id, title, level })
-  }
-
+export default function TableOfContentsInline({ headings }: TableOfContentsInlineProps) {
   if (headings.length === 0) {
     return null
   }
+
+  // headingsをTocItem形式に変換
+  const tocItems: TocItem[] = headings.map(heading => ({
+    id: heading.id,
+    title: heading.text,
+    level: heading.level
+  }))
 
   return (
     <nav className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
@@ -32,7 +27,7 @@ export default function TableOfContentsInline({ content }: TableOfContentsInline
         目次
       </h3>
       <ul className="space-y-2">
-        {headings.map((item) => (
+        {tocItems.map((item) => (
           <li key={item.id}>
             <a
               href={`#${item.id}`}
@@ -50,13 +45,4 @@ export default function TableOfContentsInline({ content }: TableOfContentsInline
       </ul>
     </nav>
   )
-}
-
-// 文字列からslugを生成する関数
-function generateSlug(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/g, '') // 英数字とひらがな・カタカナ・漢字のみ
-    .replace(/\s+/g, '-')
-    .trim()
 }

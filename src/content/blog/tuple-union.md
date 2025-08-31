@@ -4,7 +4,7 @@ date: "2025-08-27"
 author: "Tech Blog編集部"
 coverImage: "images/blog-image1.jpg"
 tags: ["tuple", "union", "Next.js", "React", "type"]
-excerpt: "MDXを使ってMarkdownとJSXを組み合わせた高機能なブログ記事の作成方法を学びましょう。"
+excerpt: "タプル型とユニオン型について、これらの型の使用方法などを具体例を交えてまとめました。"
 published: true
 ---
 

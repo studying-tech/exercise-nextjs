@@ -4,7 +4,7 @@ date: "2025-08-28"
 author: "Tech Blog編集部"
 coverImage: "images/blog-image2.jpg"
 tags: ["interface", "type", "Next.js", "React"]
-excerpt: "MDXを使ってMarkdownとJSXを組み合わせた高機能なブログ記事の作成方法を学びましょう。"
+excerpt: "TypeScriptでinterfaceとtypeをどう使い分けるかをまとめました。"
 published: true
 ---
 
