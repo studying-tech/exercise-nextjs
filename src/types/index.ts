@@ -1,26 +1,31 @@
+// ブログ記事のデータ型
 export interface PostData {
   slug: string
   title: string
   date: string
   author: string
-  tags: string[]
   excerpt: string
-  coverImage?: string
   content: string
-  published: boolean
+  rawContent: string // 目次生成用の生のMarkdownコンテンツ
+  coverImage?: string
+  tags?: string[]
+  published?: boolean
+  isMdx?: boolean
 }
 
+// 記事のメタデータ型（contentを除く）
 export interface PostMeta {
   slug: string
   title: string
   date: string
   author: string
-  tags: string[]
   excerpt: string
   coverImage?: string
-  published: boolean
+  tags?: string[]
+  published?: boolean
 }
 
+// ページのメタデータ型（実装済み）
 export interface PageMetadata {
   title: string
   description: string

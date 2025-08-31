@@ -1,0 +1,383 @@
+---
+title: "【React入門】useStateを完全理解！対話的なUIを作ろう"
+date: "2025-08-24"
+author: "Tech Blog編集部"
+coverImage: "images/blog-image5.jpg"
+tags: ["React", "useState", "初心者", "JavaScript"]
+excerpt: "Reactの基本フック「useState」の使い方を、動くコード例で徹底解説！普通の変数との違いから、インタラクティブなコンポーネントの作り方まで、初心者にも分かりやすく紹介します。"
+published: true
+---
+
+# 【React 入門】useState を完全理解！対話的な UI を作ろう
+
+React でユーザーの操作によって見た目が変わる「動的なコンポーネント」を作るとき、絶対に欠かせないのが **`useState`** フックです。この記事では、`useState` がなぜ必要なのか、そしてどうやって使うのかを、具体的なコードを交えながら見ていきましょう！
+
+まずは実際に動くカウンターを触ってみてください
+
+<SimpleCounter />
+
+## useState って何？
+
+`useState` は、一言でいうと **「コンポーネントに"記憶力"を与える魔法」** です。
+
+通常の JavaScript 変数では、値が変わっても React はそれを検知できず、画面は更新されません。しかし `useState` を使えば、React に「この値が変わったから、画面を再描画してね！」と伝えることができます。
+
+これにより、ユーザーのアクションに応じて表示がリアルタイムに変わる、インタラクティブな UI が実現できるのです。
+
+## useState の基本的な使い方
+
+### 1. 状態の宣言
+
+まず、コンポーネント内で `useState` を呼び出して、状態を宣言します。
+
+```javascript
+import { useState } from "react";
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  // この宣言で：
+  // count は現在の値
+  // setCount は値を更新する関数
+  // useState(0) で初期値を 0 に設定
+}
+```
+
+**重要なポイント：**
+
+- `useState` は配列を返し、**分割代入**で 2 つの値を受け取ります
+- 1 つ目は**現在の状態値**、2 つ目は**状態を更新する関数**
+- 更新関数の名前は慣例的に `set + 状態名` にします
+
+### 2. 状態の更新
+
+状態を更新するには、`useState` から返された関数（上の例では `setCount`）を使います。
+
+```javascript
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  const increment = () => {
+    setCount(count + 1); // countを1増やす
+  };
+
+  const decrement = () => {
+    setCount(count - 1); // countを1減らす
+  };
+
+  const reset = () => {
+    setCount(0); // countを0にリセット
+  };
+
+  return (
+    <div>
+      <p>カウント: {count}</p>
+      <button onClick={increment}>+1</button>
+      <button onClick={decrement}>-1</button>
+      <button onClick={reset}>リセット</button>
+    </div>
+  );
+}
+```
+
+### 3. より実用的な例
+
+文字列の状態管理も同じように行えます：
+
+```javascript
+function GreetingForm() {
+  const [name, setName] = useState("");
+
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        placeholder="お名前を入力してください"
+        value={name}
+        onChange={handleNameChange}
+      />
+      <p>こんにちは、{name || "名無し"}さん！</p>
+    </div>
+  );
+}
+```
+
+## なぜ普通の変数ではダメなの？
+
+初心者の方によくある疑問：「なんで普通の変数じゃダメなの？」
+
+答えは **「React が変更を検知できないから」** です。
+
+### 普通の変数の場合
+
+```javascript
+// これは動かない！
+function BrokenCounter() {
+  let count = 0; // 普通の変数
+
+  const increment = () => {
+    count = count + 1; // 値は変わる
+    console.log(count); // コンソールには表示される
+    // でも画面は更新されない！
+  };
+
+  return (
+    <div>
+      <p>カウント: {count}</p>
+      <button onClick={increment}>+1</button>
+    </div>
+  );
+}
+```
+
+上記のコードでは、ボタンをクリックしても画面の数字は変わりません。なぜなら：
+
+1. **再レンダリングが発生しない** - React は値の変更を検知できない
+2. **関数が再実行されるたびに初期化** - `count` は毎回 0 に戻る
+3. **状態の永続化ができない** - コンポーネントの状態を保持できない
+
+### ✅ useState の場合
+
+```javascript
+// これは動く！
+function WorkingCounter() {
+  const [count, setCount] = useState(0); // useState を使う
+
+  const increment = () => {
+    setCount(count + 1); // Reactが変更を検知
+    // 自動で画面が更新される！
+  };
+
+  return (
+    <div>
+      <p>カウント: {count}</p>
+      <button onClick={increment}>+1</button>
+    </div>
+  );
+}
+```
+
+## useState の高度なテクニック
+
+### 1. 関数型の更新
+
+現在の値に基づいて更新する場合、より安全な書き方があります：
+
+```javascript
+function SafeCounter() {
+  const [count, setCount] = useState(0);
+
+  const increment = () => {
+    // 推奨：関数を渡す方法
+    setCount((prevCount) => prevCount + 1);
+  };
+
+  const addFive = () => {
+    // 複数回の更新も正確に動作
+    setCount((prevCount) => prevCount + 1);
+    setCount((prevCount) => prevCount + 1);
+    setCount((prevCount) => prevCount + 1);
+    setCount((prevCount) => prevCount + 1);
+    setCount((prevCount) => prevCount + 1);
+  };
+
+  return (
+    <div>
+      <p>カウント: {count}</p>
+      <button onClick={increment}>+1</button>
+      <button onClick={addFive}>+5</button>
+    </div>
+  );
+}
+```
+
+### 2. オブジェクトの状態管理
+
+```javascript
+function UserProfile() {
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    age: 0,
+  });
+
+  const updateName = (newName) => {
+    setUser((prevUser) => ({
+      ...prevUser, // 既存のプロパティをコピー
+      name: newName, // nameだけを更新
+    }));
+  };
+
+  return (
+    <div>
+      <input
+        value={user.name}
+        onChange={(e) => updateName(e.target.value)}
+        placeholder="名前"
+      />
+      <p>名前: {user.name}</p>
+    </div>
+  );
+}
+```
+
+## よくある落とし穴と解決方法
+
+### 1. 状態の更新は非同期
+
+React の状態更新は**非同期**で行われます。これは「setState を呼んでも、すぐには値が変わらない」ということです。
+
+```javascript
+function AsyncUpdate() {
+  const [count, setCount] = useState(0);
+
+  const handleClick = () => {
+    console.log("更新前:", count); // 例：0
+    setCount(count + 1);
+    console.log("更新後（のはず）:", count); // でもまだ0！
+
+    // setState は非同期なので、console.log の時点では
+    // まだ古い値のままです
+  };
+
+  return (
+    <div>
+      <p>カウント: {count}</p>
+      <button onClick={handleClick}>クリック</button>
+    </div>
+  );
+}
+```
+
+**なぜ非同期なのか？**
+
+React は複数の状態更新をまとめて処理することで、パフォーマンスを向上させています。この仕組みを「バッチング」と呼びます。
+
+**正しい対処法：**
+
+```javascript
+function CorrectAsyncHandling() {
+  const [count, setCount] = useState(0);
+
+  const handleClick = () => {
+    // 方法1：関数型の更新を使用
+    setCount((prevCount) => {
+      console.log("現在の値:", prevCount);
+      return prevCount + 1;
+    });
+
+    // 方法2：useEffect で状態変化を監視
+    // useEffect(() => {
+    //   console.log("countが変更されました:", count);
+    // }, [count]);
+  };
+
+  return (
+    <div>
+      <p>カウント: {count}</p>
+      <button onClick={handleClick}>クリック</button>
+    </div>
+  );
+}
+```
+
+### 2. オブジェクトの更新は浅いコピーで
+
+「浅いコピー」とは、オブジェクトの最上位のプロパティのみをコピーし、ネストされたオブジェクトは参照をコピーする方法です。
+
+**浅いコピーと深いコピーの違い：**
+
+```javascript
+// 元のオブジェクト
+const originalUser = {
+  name: "田中",
+  address: {
+    city: "東京",
+    country: "日本",
+  },
+};
+
+// 浅いコピー（...スプレッド演算子）
+const shallowCopy = { ...originalUser };
+shallowCopy.name = "佐藤"; // これは大丈夫
+shallowCopy.address.city = "大阪"; // これは危険！
+
+console.log(originalUser.address.city); // "大阪" になってしまう
+```
+
+**React での正しいオブジェクト更新：**
+
+```javascript
+function UserManagement() {
+  const [user, setUser] = useState({
+    name: "田中",
+    profile: {
+      age: 25,
+      city: "東京",
+    },
+  });
+
+  // ❌ ダメな例：直接変更
+  const badUpdate = () => {
+    user.name = "佐藤"; // 直接変更
+    setUser(user); // Reactは変更を検知しない
+  };
+
+  // ✅ 良い例：浅いコピーで更新
+  const goodUpdate = () => {
+    setUser({
+      ...user, // 既存のプロパティをコピー
+      name: "佐藤", // nameだけを更新
+    });
+  };
+
+  // ✅ ネストされたオブジェクトの更新
+  const updateNestedObject = () => {
+    setUser({
+      ...user,
+      profile: {
+        ...user.profile, // profileオブジェクトも浅いコピー
+        city: "大阪",
+      },
+    });
+  };
+
+  return (
+    <div>
+      <p>名前: {user.name}</p>
+      <p>年齢: {user.profile.age}</p>
+      <p>都市: {user.profile.city}</p>
+      <button onClick={goodUpdate}>名前を変更</button>
+      <button onClick={updateNestedObject}>都市を変更</button>
+    </div>
+  );
+}
+```
+
+**なぜ浅いコピーが重要なのか：**
+
+1. **React の変更検知** - React は参照の変更をチェックして再レンダリングを判断します
+2. **予期しない副作用の防止** - 元のオブジェクトを変更してしまうバグを防げます
+3. **パフォーマンス最適化** - メモ化（useMemo、React.memo）との相性が良くなります
+
+**浅いコピーの制限：**
+
+ネストが深いオブジェクトの場合、全ての階層で浅いコピーが必要になります。非常に深い場合は、immutability-helper や Immer などのライブラリの使用を検討しましょう。
+
+## まとめ
+
+`useState` は React 開発において最も重要な概念の一つです：
+
+- ✅ **状態管理** - コンポーネントに「記憶力」を与える
+- ✅ **自動更新** - 値が変わると画面も自動で更新
+- ✅ **シンプル** - `const [value, setValue] = useState(初期値)` だけ
+- ✅ **強力** - あらゆるインタラクティブ UI の基盤
+- ✅ **型安全** - TypeScript との相性も抜群
+
+React の `useState` をマスターすれば、ユーザーの操作に応じて動的に変わる魅力的な UI を作ることができるようになります。
+
+今回学んだ内容を活かして、ぜひ自分だけのインタラクティブなコンポーネントを作ってみてください！まずは簡単なカウンターから始めて、徐々に複雑な状態管理にチャレンジしていきましょう。

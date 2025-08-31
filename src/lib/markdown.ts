@@ -3,79 +3,103 @@ import matter from 'gray-matter'
 import path from 'path'
 import { remark } from 'remark'
 import html from 'remark-html'
-import type { PostData } from '@/types'
+import { serialize } from 'next-mdx-remote/serialize'
+import rehypeHighlight from 'rehype-highlight'
+import remarkRehype from 'remark-rehype'
+import rehypeStringify from 'rehype-stringify'
+import rehypeSlug from 'rehype-slug'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import type { Post, PostData } from '@/types'
 
 const postsDirectory = path.join(process.cwd(), 'src/content/blog')
 
-export function getAllPostSlugs() {
+/**
+ * /src/content/blog 内のすべての .md と .mdx ファイル名をslugとして取得
+ */
+export function getAllPostSlugs(): string[] {
   if (!fs.existsSync(postsDirectory)) {
     return []
   }
-
   const fileNames = fs.readdirSync(postsDirectory)
   return fileNames
-    .filter((fileName) => fileName.endsWith('.md'))
-    .map((fileName) => {
-      return {
-        slug: fileName.replace(/\.md$/, ''),
-      }
-    })
+    .filter((fileName) => fileName.endsWith('.md') || fileName.endsWith('.mdx'))
+    .map((fileName) => fileName.replace(/\.(md|mdx)$/, ''))
 }
 
+/**
+ * slugに基づいて記事のデータを取得
+ */
 export async function getPostBySlug(slug: string): Promise<PostData | null> {
   try {
-    const fullPath = path.join(postsDirectory, `${slug}.md`)
+    // .md と .mdx の両方をチェック
+    let fullPath = path.join(postsDirectory, `${slug}.md`)
+    let isMdx = false
+    
+    if (!fs.existsSync(fullPath)) {
+      fullPath = path.join(postsDirectory, `${slug}.mdx`)
+      isMdx = true
+    }
+    
+    if (!fs.existsSync(fullPath)) {
+      return null
+    }
+    
     const fileContents = fs.readFileSync(fullPath, 'utf8')
 
+    // gray-matterでfrontmatterとcontentを解析
     const { data, content } = matter(fileContents)
 
-    const processedContent = await remark().use(html).process(content)
-    const contentHtml = processedContent.toString()
+    let contentHtml: string
 
+    if (isMdx) {
+      // MDXファイルの場合、生のコンテンツをそのまま返す
+      contentHtml = content
+    } else {
+      // Markdownファイルの場合、remark + rehype でHTMLに変換（ハイライト付き）
+      const processedContent = await remark()
+        .use(remarkRehype, { allowDangerousHtml: true })
+        .use(rehypeSlug)
+        .use(rehypeHighlight, {
+          detect: true,
+          subset: false
+        })
+        .use(rehypeStringify, { allowDangerousHtml: true })
+        .process(content)
+      contentHtml = processedContent.toString()
+    }
+
+    // PostDataオブジェクトとして返す
     return {
       slug,
       content: contentHtml,
-      title: data.title || 'Untitled',
-      date: data.date || new Date().toISOString(),
-      author: data.author || 'Anonymous',
-      tags: data.tags || [],
-      excerpt: data.excerpt || '',
-      coverImage: data.coverImage,
-      published: data.published ?? true,
-    }
+      rawContent: content, // 生のMarkdownコンテンツを保存
+      isMdx,
+      ...(data as { [key: string]: any }),
+    } as PostData
   } catch (error) {
     console.error(`Error reading post ${slug}:`, error)
     return null
   }
 }
 
+/**
+ * すべての記事を日付の新しい順で取得
+ */
 export async function getAllPosts(): Promise<PostData[]> {
   const slugs = getAllPostSlugs()
-  const posts = await Promise.all(slugs.map((slug) => getPostBySlug(slug.slug)))
+  const posts = await Promise.all(slugs.map((slug) => getPostBySlug(slug)))
 
-  return posts
-    .filter((post): post is PostData => post !== null && post.published)
-    .sort((a, b) => (a.date > b.date ? -1 : 1))
+  const validPosts = posts.filter((post): post is PostData => post !== null)
+
+  return validPosts
+    .filter((post) => post.published !== false) // 下書き(published: false)を除外
+    .sort((post1, post2) => (post1.date > post2.date ? -1 : 1))
 }
 
+/**
+ * 特定のタグを持つ記事を取得
+ */
 export async function getPostsByTag(tag: string): Promise<PostData[]> {
-  const posts = await getAllPosts()
-  return posts.filter((post) => post.tags.includes(tag))
-}
-
-export function getAllTags(): string[] {
-  const slugs = getAllPostSlugs()
-  const tags = new Set<string>()
-
-  slugs.forEach(({ slug }) => {
-    const fullPath = path.join(postsDirectory, `${slug}.md`)
-    const fileContents = fs.readFileSync(fullPath, 'utf8')
-    const { data } = matter(fileContents)
-
-    if (data.tags && Array.isArray(data.tags)) {
-      data.tags.forEach((tag: string) => tags.add(tag))
-    }
-  })
-
-  return Array.from(tags).sort()
+  const allPosts = await getAllPosts()
+  return allPosts.filter((post) => post.tags && post.tags.includes(tag))
 }

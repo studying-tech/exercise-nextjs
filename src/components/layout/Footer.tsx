@@ -1,56 +1,56 @@
-import Link from 'next/link'
+import Link from "next/link";
+import { getAllTags } from '@/lib/posts'
 
-export function Footer() {
-  const currentYear = new Date().getFullYear()
+export async function Footer() {
+  const currentYear = new Date().getFullYear();
+  const tags = await getAllTags();
 
+  // フッターリンクを定義
   const footerLinks = [
     {
-      title: 'コンテンツ',
+      title: "コンテンツ",
       links: [
-        { name: 'ブログ', href: '/blog' },
-        { name: 'About', href: '/about' },
+        { name: "ブログ", href: "/blog" },
+        { name: "このサイトについて", href: "/about" },
+        // 必要に応じてさらにコンテンツリンクを追加
       ],
     },
     {
-      title: 'カテゴリー',
+      title: "リンク",
       links: [
-        { name: 'Next.js', href: '/blog?tag=Next.js' },
-        { name: 'React', href: '/blog?tag=React' },
-        { name: 'TypeScript', href: '/blog?tag=TypeScript' },
-        { name: 'Web開発', href: '/blog?tag=Web開発' },
+        { name: "GitHub", href: "https://github.com/your-repo" }, // プレースホルダー
+        { name: "Twitter", href: "https://twitter.com/your-handle" }, // プレースホルダー
       ],
     },
-    {
-      title: 'リンク',
-      links: [
-        { name: 'GitHub', href: 'https://github.com' },
-        { name: 'Twitter', href: 'https://twitter.com' },
-      ],
-    },
-  ]
+  ];
 
   return (
-    <footer className='bg-gray-900 text-white mt-auto'>
-      <div className='container mx-auto px-4 py-12'>
-        <div className='grid grid-cols-1 md:grid-cols-4 gap-8'>
-          <div className='md:col-span-1'>
-            <Link href='/' className='text-2xl font-bold mb-4 block hover:text-blue-400 transition-colors'>
+    <footer className="bg-gray-900 text-white mt-auto">
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:max-w-4xl md:mx-auto md:text-center">
+          {/* サイト情報セクション */}
+          <div>
+            <Link
+              href="/"
+              className="text-lg font-semibold mb-4 block hover:text-blue-400 transition-colors"
+            >
               Tech Blog
             </Link>
-            <p className='text-gray-400'>最新の技術情報、プログラミング、Web開発に関する記事をお届けします。</p>
+            <p className="text-gray-400 text-sm">
+              最新の技術情報と開発の知見を共有するブログです。
+            </p>
           </div>
 
+          {/* フッターリンクセクション */}
           {footerLinks.map((section) => (
             <div key={section.title}>
-              <h3 className='text-lg font-semibold mb-4'>{section.title}</h3>
-              <ul className='space-y-2'>
+              <h3 className="text-lg font-semibold mb-4">{section.title}</h3>
+              <ul className="space-y-2">
                 {section.links.map((link) => (
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className='text-gray-400 hover:text-white transition-colors'
-                      target={link.href.startsWith('http') ? '_blank' : undefined}
-                      rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      className="text-gray-400 hover:text-blue-400 transition-colors"
                     >
                       {link.name}
                     </Link>
@@ -61,10 +61,30 @@ export function Footer() {
           ))}
         </div>
 
-        <div className='border-t border-gray-800 mt-8 pt-8 text-center text-gray-400'>
+        {/* タグセクション */}
+        <div className="border-t border-gray-800 mt-8 pt-8">
+          <h3 className="text-lg font-semibold mb-4 text-center text-white">タグ</h3>
+          <div className="flex flex-wrap justify-center gap-3">
+            {tags.map((tag) => (
+              <Link
+                key={tag.name}
+                href={`/blog/tag/${tag.name}`}
+                className="bg-gray-800 text-gray-300 px-3 py-2 rounded-full text-sm border border-gray-700 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-300"
+              >
+                {tag.name}
+                <span className="ml-2 bg-gray-700 text-gray-300 text-xs px-2 py-0.5 rounded-full">
+                  {tag.count}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* コピーライトセクション */}
+        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
           <p>&copy; {currentYear} Tech Blog. All rights reserved.</p>
         </div>
       </div>
     </footer>
-  )
+  );
 }

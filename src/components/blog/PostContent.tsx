@@ -1,14 +1,39 @@
-'use client'
+import { MDXRemote } from "next-mdx-remote/rsc";
+import rehypeHighlight from "rehype-highlight";
+import rehypeSlug from "rehype-slug";
+import SimpleCounter from "@/components/interactive/SimpleCounter";
 
 interface PostContentProps {
-  content: string
+  content: string;
+  isMdx?: boolean;
 }
 
-export function PostContent({ content }: PostContentProps) {
+export function PostContent({ content, isMdx = false }: PostContentProps) {
+  if (isMdx) {
+    return (
+      <div className="prose prose-base max-w-none prose-p:leading-relaxed prose-h1:mb-6 prose-h2:mt-12 prose-h2:border-b prose-h2:pb-4 prose-h3:mt-10 prose-a:text-blue-600 hover:prose-a:underline prose-pre:p-0 prose-pre:bg-transparent prose-pre:text-current prose-code:before:content-none prose-code:after:content-none">
+        <MDXRemote 
+          source={content}
+          options={{
+            mdxOptions: {
+              rehypePlugins: [
+                rehypeSlug,
+                rehypeHighlight
+              ],
+            },
+          }}
+          components={{
+            SimpleCounter
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <div
-      className='prose prose-lg max-w-none prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-p:text-gray-700 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-pre:bg-gray-100 prose-pre:text-gray-800 prose-code:text-pink-600 prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-img:rounded-lg prose-img:shadow-md'
+      className="prose prose-base max-w-none prose-p:leading-relaxed prose-h1:mb-6 prose-h2:mt-12 prose-h2:border-b prose-h2:pb-4 prose-h3:mt-10 prose-a:text-blue-600 hover:prose-a:underline prose-pre:p-0 prose-pre:bg-transparent prose-pre:text-current prose-code:before:content-none prose-code:after:content-none"
       dangerouslySetInnerHTML={{ __html: content }}
     />
-  )
+  );
 }

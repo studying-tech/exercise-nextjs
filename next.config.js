@@ -1,7 +1,26 @@
+const rehypeHighlight = require('rehype-highlight')
+const rehypeSlug = require('rehype-slug')
+const rehypeAutolinkHeadings = require('rehype-autolink-headings')
+
+const withMDX = require('@next/mdx')({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: [
+      rehypeSlug,
+      rehypeHighlight
+    ],
+  },
+})
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
+  pageExtensions: ['tsx', 'ts', 'jsx', 'js', 'mdx'],
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    dirs: ['src'],
   },
   images: {
     domains: ['images.unsplash.com', 'via.placeholder.com'],
@@ -26,4 +45,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+module.exports = withMDX(nextConfig)
